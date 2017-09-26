@@ -1,30 +1,49 @@
 # get-code-commentary
 Retrieve all commentaries from code files in one of the following languages: Java, Javascript, Python, PHP e Ruby
 
-Status: [Work in Progress - 08/17/2017]
+Status: [Release 01 / Testing - 09/26/2017]
 
-This repository will contain shell scripts code that can retrieve commentaries from source files from one of the following programming 
+This repository contain shell scripts that can retrieve commentaries from source files from one of the following programming 
 languages:
 - Java
 - JavaScript
-- Python
 - PHP
+- Python
 - Ruby
 
 They all use the command pcregrep and regular expressions to retrieve the commentaries. 
-Note: You might have to install the pcregrep package to get it working, since I use Windows I installed it fromthe CygWin installer.
-This project is being created to aid in a scientific research at UFMS (Universidade Federal de Mato Grosso do Sul).
+Note: You might have to install the pcregrep package to get it working. I use Windows so I installed it from the CygWin installer.
 
-You can run those codes in Unix distributions (not confirmed), but I tested then in Windows (by having CygWin installed and 
-running the command "sh file.sh" in the command-line.)
+This project is being created to aid in a scientific research at UFMS (Universidade Federal de Mato Grosso do Sul). You can contact me at rksgrijo@gmail.com
 
-Note: The regular expressions contained within these codes are not perfect, right now they may retrive some false-positives such
-as URLs inside strings. 
+How-To Use Instructions:
+  You can run those codes in Unix distributions (not confirmed yet), but I tested then in Windows! (by having CygWin installed and 
+running the command "sh file.sh" in the command-line)
+  
+  - To run in a single file, place the respective programming language .sh in the same folder of the target file and run on the command line the following: sh get-code-comments.sh target.java
+    For instance: sh get-java-comments.sh myFile.java
+    A resulting myFile_Output.txt will be created containing all the comments.
+ - To run on multiple files, place the respective programming language .sh and the batch-run.sh in the same folder of the target directory that contain all desired .extension files (It works even if the files are inside different subfolders. As in git-hub's masters directories). Run the following on the command line: sh batch-run.sh get-code-comments.sh foldername .extension
+    For instance: sh batch-run.sh get-java-comments.sh myDirectory .java
+    After a while, a resulting myDirectory_Output will be created containing a CommentsPerFile Folder and a AllComments.txt
 
-Project Scripts:
-- Java
-  - get-java-comments.sh
-    Description: this script takes one java file and retrieve all commentaries in an output text file.
-    It requires two arguments, the first is the input file name, and the second the output file name.
-    Example: sh get-java-comments.sh FileName.java output1.txt
-    Note that all files must be within the same directory of the .sh file
+How It Works:
+  When looking for comments in a programming language using a regular expression, some false-positives might be collected accidentaly.
+  For example, in Java the possible commentaries types are:
+    - // (Single-Line)
+    - /* (Multi-line)
+    - /** (JavaDoc)
+  If the code has a string that contains one of those characters like String s = "https://github.com/"
+  This would be collected by a regular expresion although it's not a commentary.
+  To fix this problem, my regular expressions were modified to no only get comments, but also all the strings! Afterwards they are individually removed from the output, resulting in only the comments themselfs.
+  If you are interested only in the regular expressions for getting only the comments here they are:
+  Java ```(\/\*([^*]|(\*+[^*/]))*\*+\/)|(\/\/.*)```
+  JavaScript ```(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)|(<!--.*)```
+  PHP ```(\*+[^*/]))*\*+/)|(//.*)|(<!--.*)|(#.*)```
+  Python ```(\"\"\"((.|[\r\n])*?)\"\"\")|(#.*)```
+  Ruby ```(=begin[\r\n]((.|[\r\n])*?)=end[\r\n])|(#.*)```
+  If you want to fix the false-positives problems, simple use my codes or study how they work.
+  
+Additional Notes:
+  This code is not optimized at all, I'm only a beginner at shell scripts, so I might have used unnecessary operations. If you can optimize this code, by any means feel free to contribute or contact me. It may take long times to run on large directories with multiple .extension files.
+  
