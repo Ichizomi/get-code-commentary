@@ -1,7 +1,7 @@
 # get-code-commentary
 Retrieve all commentaries from code files in one of the following languages: Java, Javascript, Python, PHP e Ruby
 
-Status: [Release 01 / Testing - 09/26/2017]
+# Status: [Release 01 / Testing - 09/26/2017]
 
 This repository contain shell scripts that can retrieve commentaries from source files from one of the following programming 
 languages:
@@ -17,7 +17,7 @@ Note: You might have to install the pcregrep package to get it working. I use Wi
 
 This project is being created to aid in a scientific research at UFMS (Universidade Federal de Mato Grosso do Sul). You can contact me at rksgrijo@gmail.com
 
-How-To Use Instructions:
+## How-To Use Instructions:
 
   You can run those codes in Unix distributions (not confirmed yet), but I tested then in Windows! (by having CygWin installed and 
 running the command "sh file.sh" in the command-line)
@@ -34,7 +34,7 @@ running the command "sh file.sh" in the command-line)
  
  After a while, a resulting myDirectory_Output will be created containing a CommentsPerFile Folder and a AllComments.txt
 
-How It Works:
+## How It Works:
 
   When looking for comments in a programming language using a regular expression, some false-positives might be collected accidentaly.
 
@@ -66,7 +66,7 @@ Ruby ```(=begin[\r\n]((.|[\r\n])*?)=end[\r\n])|(#.*)```
 
 If you want to fix the false-positives problems, simple use my codes or study how they work.
   
-Additional Notes:
+## Additional Notes:
 
 This code is not optimized at all, I'm only a beginner at shell scripts, so I might have used unnecessary operations. If you can optimize this code, by any means feel free to contribute or contact me. It may take long times to run on large directories with multiple .extension files.
   
