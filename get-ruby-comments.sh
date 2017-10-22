@@ -39,7 +39,8 @@ fi
 # Convert Unix Line endings
 unix2dos -n ${inputfile} "${inputfile}_DOS"
 # Get all commentaries and all strings inside file.
-pcregrep -M -o "([\"\'\`].*[\"\'\`])|(=begin[\r\n]((.|[\r\n])*?)=end[\r\n])|(#.*)" "${inputfile}_DOS" >${outputfile}
+#pcregrep -M -o "([\"\'\`].*[\"\'\`])|(=begin[\r\n]((.|[\r\n])*?)=end[\n])|(#.*)" "${inputfile}_DOS" >${outputfile}
+pcregrep -M -o "([\"\'\`].*[\"\'\`])|(=begin[\r\n](.|[\r\n])*=end)|(#.*)" "${inputfile}_DOS" >${outputfile}
 # Replace all CRLF with \r
 sed ':a;N;$!ba;s/\r\n/\\r/g' <${outputfile} >${outputfile2}
 # Remove all strings from file
@@ -49,10 +50,10 @@ sed "s/^\`.*//g" <${outputfile4} > ${outputfile2}
 # Remove all empty lines from file
 sed '/^$/d' <${outputfile2} > ${outputfile3}
 # Clean temporary files
-rm ${outputfile}
-rm ${outputfile2}
-rm ${outputfile4}
-rm "${inputfile}_DOS"
+#rm ${outputfile}
+#rm ${outputfile2}
+#rm ${outputfile4}
+#rm "${inputfile}_DOS"
 # If there are two arguments (multi-file). Insert the path + filename in the first line of the archive.
 if [ $# -eq 2 ]
 	then

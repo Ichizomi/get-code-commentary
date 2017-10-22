@@ -22,6 +22,7 @@ outputfile="Output.txt" # Discartable Output
 outputfile2="Output2.txt" # Discartable Output
 outputfile4="Output4.txt" # Discartable Output
 character="\`" # Scaping of a special character
+character2="\'" # Scaping of another special character
 # If there is only one argument (single-file).
 if [ $# -eq 1 ]
 	then
@@ -37,16 +38,30 @@ fi
 
 # Convert Unix Line endings
 unix2dos -n ${inputfile} "${inputfile}_DOS"
+# Replaces all small u characters with U+00C6 unicode character
+sed -r 's/u/\xC6/g' <"${inputfile}_DOS" > "${outputfile}"
 # Get all commentaries and all strings inside file.
-pcregrep -M -o "([\"\'\`].*[\"\'\`])|(\"\"\"((.|[\r\n])*?)\"\"\")|(#.*)" "${inputfile}_DOS" >${outputfile}
+pcregrep -M -o "((\x{00C6}|\x{0072}|\w{0055}|\w{0052})\'\'\'(\s{0,2}|.)*\'\'\')|(\"[^\"]+\")|([\'\`].*[\'\`])|(r?\"\"\"((.|[\r\n])*?)\"\"\")|(#.*)" "${outputfile}" >${outputfile2}
+# Remove all R or U type ''' """ strings from file.
+pcregrep -M -o "((\x{00C6}|\x{0072}|\x{0055}|\x{0052})(\'\'\'|\"\"\")(\s{0,2}|.)*(\'\'\'|\"\"\"))" <${outputfile2} > ${outputfile4}
+# Compare file that has all commentaries and strings with one that has only R or U type strings. And remove then
+comm --nocheck-order -2 ${outputfile2} ${outputfile4} > ${outputfile}
+awk '!/^\t/' <${outputfile} > ${outputfile4}
 # Replace all CRLF with \r
-sed ':a;N;$!ba;s/\r\n/\\r/g' <${outputfile} >${outputfile2}
+sed ':a;N;$!ba;s/\r\n/\\r/g' <${outputfile4} >${outputfile}
 # Remove all strings from file
-sed 's/^".*//g' <${outputfile2} > ${outputfile3}
-sed "s/^'.*//g" <${outputfile3} > ${outputfile4}
-sed "s/^\`.*//g" <${outputfile4} > ${outputfile2}
+sed 's/^u.*//g' <${outputfile} > ${outputfile4}
+sed 's/^""".*"""/ &/g' <${outputfile4} > ${outputfile} # Add a space before the Python multi-line comments. So its safe to remove strings.
+sed 's/^"[^"]*"//g' <${outputfile} > ${outputfile4} # Remove strings
+sed 's/^\s//g' <${outputfile4} > ${outputfile} # remove temporary whitespace
+sed "s/^'.*//g" <${outputfile} > ${outputfile4}
+sed "s/^\`.*//g" <${outputfile4} > ${outputfile}
+# Replaces back all U+00C6 unicode character with small u characters 
+sed -r 's/\xC6/u/g' <${outputfile} > ${outputfile4}
+# Remove all lines that start with a CSS hexcode colors
+awk '!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3});.*/' <${outputfile4} > ${outputfile}
 # Remove all empty lines from file
-sed '/^$/d' <${outputfile2} > ${outputfile3}
+sed '/^$/d' <${outputfile} > ${outputfile3}
 # Clean temporary files
 rm ${outputfile}
 rm ${outputfile2}

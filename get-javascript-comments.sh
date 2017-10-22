@@ -18,7 +18,7 @@ if [ $# -eq 2 ]
 		inputfile=$1 # Path + Filename
 		outputpath=$2 # Path
 fi
-truename=$(echo ${inputfile} | grep -o "[^\/]*\.js") # Grab true file name without path (Only working for .java for now)
+truename=$(echo ${inputfile} | grep -o "[^\/]*\.js") # Grab true file name without path
 outputfile="Output.txt" # Discartable Output
 outputfile2="Output2.txt" # Discartable Output
 outputfile4="Output4.txt" # Discartable Output
