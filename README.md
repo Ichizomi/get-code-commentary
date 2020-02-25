@@ -1,7 +1,7 @@
 # get-code-commentary
 Retrieve all commentaries from code files in one of the following languages: Java, Javascript, Python, PHP e Ruby
 
-# Status: [Release 01 / Testing - 09/26/2017]
+# Status: [Release 01]
 
 This repository contain shell scripts that can retrieve commentaries from source files from one of the following programming 
 languages:
@@ -68,5 +68,5 @@ If you want to fix the false-positives problems, simple use my codes or study ho
   
 ## Additional Notes:
 
-This code is not optimized at all, I'm only a beginner at shell scripts, so I might have used unnecessary operations. If you can optimize this code, by any means feel free to contribute or contact me. It may take long times to run on large directories with multiple .extension files.
+This code is not optimized at all, I'm only a beginner at shell scripts, so I might have used unnecessary operations. If you can optimize this code or wishes to redistribute it, by any means feel free to do so. It may take long times to run on large directories with multiple .extension files.
   
